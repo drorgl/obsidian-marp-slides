@@ -35,7 +35,7 @@ export class MarpPreviewView extends ItemView  {
                 backdropSelector: false
             },
             math: this.settings.MathTypesettings as MathOptions,
-            minifyCSS: true,
+            minifyCSS: false,
             script: false
           });
 

@@ -1,12 +1,13 @@
-import marpCli, { CLIError, CLIErrorCode } from '@marp-team/marp-cli'
+// import marpCli, { CLIError, CLIErrorCode } from '@marp-team/marp-cli'
 import { TFile } from 'obsidian';
 import { MarpSlidesSettings } from './settings';
 import { FilePath } from './filePath';
+// import { CLIError, CLIErrorCode } from '@marp-team/marp-cli/types/src/error';
 
 export class MarpCLIError extends Error {}
 
 export class MarpExport {
-
+    private marpCli : any;
     private settings : MarpSlidesSettings;
 
     constructor(settings: MarpSlidesSettings) {
@@ -109,23 +110,6 @@ export class MarpExport {
         } catch (e) {
             console.error(e)
 
-            if (
-                e instanceof CLIError &&
-                e.errorCode === CLIErrorCode.NOT_FOUND_CHROMIUM
-            ) {
-                const browsers = ['[Google Chrome](https://www.google.com/chrome/)']
-
-                if (process.platform === 'linux')
-                    browsers.push('[Chromium](https://www.chromium.org/)')
-
-                browsers.push('[Microsoft Edge](https://www.microsoft.com/edge)')
-
-                throw new MarpCLIError(
-                    `It requires to install ${browsers
-                    .join(', ')
-                    .replace(/, ([^,]*)$/, ' or $1')} for exporting.`
-                )
-            }
 
             throw e
         } finally {
@@ -140,17 +124,16 @@ export class MarpExport {
 
         try {    
             __dirname = resourcesPath;
-            const exitCode = await marpCli(argv, {});
+            if (!this.marpCli){
+                this.marpCli = await import("@marp-team/marp-cli")
+            }
+            const exitCode = await this.marpCli(argv, {});
 
             if (exitCode > 0) {
                 console.error(`Failure (Exit status: ${exitCode})`)
             }
         } catch(e) {
-            if (e instanceof CLIError){
                 console.error(`CLIError code: ${e.errorCode}, message: ${e.message}`);
-            } else {
-                console.error("Generic Error!");
-            }
         }
 
         __dirname = temp__dirname;

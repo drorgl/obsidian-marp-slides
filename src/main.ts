@@ -16,8 +16,8 @@ export default class MarpSlides extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		const libsUtility = new Libs(this.settings);
-		libsUtility.loadLibs(this.app);
+		// const libsUtility = new Libs(this.settings);
+		// libsUtility.loadLibs(this.app);
 
 		this.registerView(
 			MARP_PREVIEW_VIEW,

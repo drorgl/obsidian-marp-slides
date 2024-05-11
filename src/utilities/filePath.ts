@@ -91,6 +91,7 @@ export class FilePath  {
 
     private getPluginDirectory(vault: Vault): string {
         const fileSystem = vault.adapter as FileSystemAdapter;
+        //TODO: seems to be a problem with getBasePath
         const path = `${fileSystem.getBasePath()}/${normalizePath(vault.configDir)}/plugins/marp-slides/`;
         //console.log(path);
         return path;

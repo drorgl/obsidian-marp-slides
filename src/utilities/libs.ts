@@ -1,7 +1,7 @@
 import { App } from 'obsidian';
 import { FilePath } from './filePath';
 import { MarpSlidesSettings } from './settings';
-import { existsSync, outputFileSync } from 'fs-extra';
+import fs from "fs";
 import request from 'request';
 import JSZip from 'jszip';
 
@@ -17,7 +17,7 @@ export class Libs {
         const libPathUtility = new FilePath(this.settings);
         const libPath = libPathUtility.getLibDirectory(app.vault);
 
-        if (!existsSync(libPath)) {
+        if (!fs.existsSync(libPath)) {
 			//Download binary
 			const downloadUrl = `https://github.com/samuele-cozzi/obsidian-marp-slides/releases/download/lib-v3/lib.zip`;
 
@@ -40,7 +40,7 @@ export class Libs {
 										file.async('nodebuffer')
 										.then(function (content) {
 											const dest = `${libPathUtility.getLibDirectory(app.vault)}${filename}`;
-											outputFileSync(dest, content);
+											fs.writeFileSync(dest, content);
 										});
 									}
 								}
